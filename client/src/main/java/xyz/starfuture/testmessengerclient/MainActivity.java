@@ -49,22 +49,35 @@ public class MainActivity extends Activity {
                 bind();
             }
         });
+
+        Button btnUn = findViewById(R.id.btnUn);
+        btnUn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != sc) unbindService(sc);
+
+            }
+        });
     }
 
     private ServiceConnection sc = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
             // get messenger
             Messenger messenger = new Messenger(iBinder);
             // get message
             Message message = Message.obtain(null, CODE_MESSAGE_Client2Server);
+
             // wrap data
             Bundle bundle = new Bundle();
             bundle.putString(KEY_MESSAGE_Client2Server, "dear server,i m client.");
+
             // put data in the message
             message.setData(bundle);
             // for receiving reply from server.
             message.replyTo = messengerReceiver;
+
             // send message
             try {
                 messenger.send(message);
